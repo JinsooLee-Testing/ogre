@@ -136,62 +136,22 @@ public:
 
 		mWalkSpeed = 80.0f;
 		mDirection = Vector3::ZERO;
-
-		mWalkList.push_back(Vector3(150.0f, 0.0f, 200.0f));
-		mWalkList.push_back(Vector3(-150.0f, 0.0f, 200.0f));
-		mWalkList.push_back(Vector3(0.0f, 0.0f, -200.0f));
-		mWalkList.push_back(Ogre::Vector3::ZERO);
+		mAnimationState = mProfessorEntity->getAnimationState("Walk");
+		mAnimationState->setEnabled(true);
+		mAnimationState->setLoop(true);
 	}
 
 	bool frameStarted(const FrameEvent &evt)
 	{
-		if (mDirection == Vector3::ZERO)
-		{
-			if (nextLocation())
-			{
-				mAnimationState = mProfessorEntity->getAnimationState("Walk");
-				mAnimationState->setLoop(true);
-				mAnimationState->setEnabled(true);
-			}
-		}
-		else
-		{
-			Real move = mWalkSpeed * evt.timeSinceLastFrame; // 이동량 계산
-			mDistance -= move; // 남은 거리 계산
-			if (mDistance <= 0.0f)
-			{ // 목표 지점에 다 왔으면…
-				mProfessorNode->setPosition(mDestination); // 목표 지점에 캐릭터를 위치
-				mDirection = Vector3::ZERO; // 정지 상태로 들어간다.
-				if (!nextLocation())
-				{
-					mAnimationState->setEnabled(false);
-					mAnimationState = mProfessorEntity->getAnimationState("Idle");
-					mAnimationState->setLoop(true);
-					mAnimationState->setEnabled(true);
-				}
-			}
-			else
-			{
-				mProfessorNode->translate(mDirection * move);
-			}
-		}
+	
+		
 
 		mAnimationState->addTime(evt.timeSinceLastFrame);
 
 		return true;
 	}
 
-	bool nextLocation(void)
-	{
-		if (mWalkList.empty())  // 더 이상 목표 지점이 없으면 false 리턴
-			return false;
-		mDestination = mWalkList.front(); // 큐의 가장 앞에서 꺼내기
-		mWalkList.pop_front(); // 가장 앞 포인트를 제거
-		mDirection = mDestination - mProfessorNode->getPosition(); // 방향 계산
-		mDistance = mDirection.normalise(); // 거리 계산
 
-		return true;
-	}
 
 };
 
