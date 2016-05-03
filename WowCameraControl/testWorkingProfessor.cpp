@@ -8,7 +8,8 @@
 #include <Ogre.h>
 #include <OIS/OIS.h>
 
-
+const float MAX_CLIPPING_DISTANCE = 5000.0f;
+const float MIN_CLIPPING_DISTANCE = 30.0f;
 using namespace Ogre;
 
 class InputController : public FrameListener,
@@ -239,8 +240,8 @@ public:
 
 		mCamera->setPosition(0.0f, 100.0f, 500.0f);
 		mCamera->lookAt(0.0f, 100.0f, 0.0f);
-		mCamera->setNearClipDistance(100);
-		mCamera->setFarClipDistance(500);
+		mCamera->setNearClipDistance(MIN_CLIPPING_DISTANCE);
+		mCamera->setFarClipDistance(MAX_CLIPPING_DISTANCE);
 
 
 		mViewport = mWindow->addViewport(mCamera);
