@@ -43,14 +43,35 @@ public:
 
 	bool keyPressed(const OIS::KeyEvent &evt)
 	{
+		static Ogre::Real yDegree = 0;
+		mCamera->setOrientation(Ogre::Quaternion::IDENTITY);
 		switch (evt.key)
+		{
+		case OIS::KC_W:
+		{
+			Quaternion y(Degree(yDegree), Vector3::UNIT_Y);
+			mCamera->rotate(y);
+			yDegree += 1.0f;
+			break;
+		}
+		case OIS::KC_S:
+		{
+			Quaternion y(Degree(yDegree), Vector3::UNIT_Y);
+			mCamera->rotate(y);
+			yDegree -= 1.0f;
+			break;
+		}
+
+		case OIS::KC_ESCAPE: mContinue = false; break;
+		}
+		/*switch (evt.key)
 		{
 		case OIS::KC_W: mCameraMoveVector.y += 1; break;
 		case OIS::KC_S: mCameraMoveVector.y -= 1; break;
 		case OIS::KC_A: mCameraMoveVector.x -= 1; break;
 		case OIS::KC_D: mCameraMoveVector.x += 1; break;
 		case OIS::KC_ESCAPE: mContinue = false; break;
-		}
+		}*/
 
 		return true;
 	}
@@ -235,22 +256,22 @@ public:
 
 		// Fill Here -----------------------------------------------
 		mCamera = mSceneMgr->createCamera("main");
-		mCamera->setPosition(0.0f, 100.0f, 500.0f);
-		mCamera->lookAt(0.0f, 100.0f, 0.0f);
+		//mCamera->setPosition(0.0f, 100.0f, 500.0f);
+		//mCamera->lookAt(0.0f, 100.0f, 0.0f);
 
 		mViewport = mWindow->addViewport(mCamera, 0);
 		mViewport->setBackgroundColour(ColourValue(0.0f, 0.0f, 0.5f));
 
 		mCamera->setAspectRatio(Real(mViewport->getActualWidth()) / Real(mViewport->getActualHeight()));
 
-		mMapCamera = mSceneMgr->createCamera("MapCamera");
+		/*mMapCamera = mSceneMgr->createCamera("MapCamera");
 		mMapCamera->setPosition(0.0f, 800.0f, 1.0f);
 		mMapCamera->lookAt(0.0f, 0.0f, 0.0f);
 
 		mMapViewport = mWindow->addViewport(mMapCamera, 1, 0.79, 0.01, 0.2, 0.2);
 		mMapViewport->setBackgroundColour(ColourValue(0.0f, 0.0f, 1.0f));
 
-		mMapCamera->setAspectRatio(Real(mMapViewport->getActualWidth()) / Real(mMapViewport->getActualHeight()));
+		mMapCamera->setAspectRatio(Real(mMapViewport->getActualWidth()) / Real(mMapViewport->getActualHeight()));*/
 		// ---------------------------------------------------------
 
 
@@ -270,8 +291,10 @@ public:
 		Entity* entity1 = mSceneMgr->createEntity("Professor", "DustinBody.mesh");
 		SceneNode* node1 = mSceneMgr->getRootSceneNode()->createChildSceneNode("Professor", Vector3(0.0f, 0.0f, 0.0f));
 		node1->attachObject(entity1);
-
-
+		Vector3 ProfessorAndCameraDistance(0.0f, -50.0f, 100.0f);
+		mCamera->setPosition(node1->getPosition()-ProfessorAndCameraDistance);
+		mCamera->lookAt(0.0f, 100.0f, 0.0f);
+		//mCamera->lookAt(node1->getPosition());
 #if 0
 		Entity* entity2 = mSceneMgr->createEntity("Ninja", "ninja.mesh");
 		SceneNode* node2 = mSceneMgr->getRootSceneNode()->createChildSceneNode("Ninja", Vector3(0.0f, 0.0f, 0.0f));
