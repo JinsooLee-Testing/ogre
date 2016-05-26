@@ -43,25 +43,22 @@ public:
 
 	bool keyPressed(const OIS::KeyEvent &evt)
 	{
-		static Ogre::Real yDegree = 0;
-		mCamera->setOrientation(Ogre::Quaternion::IDENTITY);
+		static Ogre::Real pitchDegree = 1.0f;
 		switch (evt.key)
 		{
 		case OIS::KC_W:
 		{
-			Quaternion y(Degree(yDegree), Vector3::UNIT_Y);
-			mCamera->rotate(y);
-			yDegree += 1.0f;
-			break;
+			mCamera->pitch(Degree(pitchDegree));
+			pitchDegree += 1.0f;
 		}
+		break;
 		case OIS::KC_S:
 		{
-			Quaternion y(Degree(yDegree), Vector3::UNIT_Y);
-			mCamera->rotate(y);
-			yDegree -= 1.0f;
-			break;
-		}
 
+			mCamera->pitch(Degree(-pitchDegree));
+			pitchDegree += 1.0f;
+		}
+		break;
 		case OIS::KC_ESCAPE: mContinue = false; break;
 		}
 		/*switch (evt.key)
@@ -78,15 +75,32 @@ public:
 
 	bool keyReleased(const OIS::KeyEvent &evt)
 	{
-
+		static Ogre::Real pitchDegree = 1.0f;
 		switch (evt.key)
+		{
+		case OIS::KC_W:
+		{
+			mCamera->pitch(Degree(pitchDegree));
+			pitchDegree += 1.0f;
+		}
+		break;
+		case OIS::KC_S:
+		{
+
+			mCamera->pitch(Degree(-pitchDegree));
+			pitchDegree += 1.0f;
+		}
+		break;
+		case OIS::KC_ESCAPE: mContinue = false; break;
+		}
+		/*switch (evt.key)
 		{
 		case OIS::KC_W: mCameraMoveVector.y -= 1; break;
 		case OIS::KC_S: mCameraMoveVector.y += 1; break;
 		case OIS::KC_A: mCameraMoveVector.x += 1; break;
 		case OIS::KC_D: mCameraMoveVector.x -= 1; break;
 		case OIS::KC_ESCAPE: mContinue = false; break;
-		}
+		}*/
 
 		return true;
 	}
@@ -125,6 +139,7 @@ private:
 	Camera* mCamera;
 
 	Ogre::Vector3 mCameraMoveVector;
+	
 };
 
 
@@ -256,8 +271,8 @@ public:
 
 		// Fill Here -----------------------------------------------
 		mCamera = mSceneMgr->createCamera("main");
-		//mCamera->setPosition(0.0f, 100.0f, 500.0f);
-		//mCamera->lookAt(0.0f, 100.0f, 0.0f);
+		mCamera->setPosition(0.0f, 100.0f, 500.0f);
+		mCamera->lookAt(0.0f, 100.0f, 0.0f);
 
 		mViewport = mWindow->addViewport(mCamera, 0);
 		mViewport->setBackgroundColour(ColourValue(0.0f, 0.0f, 0.5f));
@@ -292,8 +307,8 @@ public:
 		SceneNode* node1 = mSceneMgr->getRootSceneNode()->createChildSceneNode("Professor", Vector3(0.0f, 0.0f, 0.0f));
 		node1->attachObject(entity1);
 		Vector3 ProfessorAndCameraDistance(0.0f, -50.0f, 100.0f);
-		mCamera->setPosition(node1->getPosition()-ProfessorAndCameraDistance);
-		mCamera->lookAt(0.0f, 100.0f, 0.0f);
+		//mCamera->setPosition(node1->getPosition()-ProfessorAndCameraDistance);
+		//mCamera->lookAt(0.0f, 100.0f, 0.0f);
 		//mCamera->lookAt(node1->getPosition());
 #if 0
 		Entity* entity2 = mSceneMgr->createEntity("Ninja", "ninja.mesh");
